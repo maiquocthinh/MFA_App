@@ -1,0 +1,36 @@
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-md-6">
+			<div class="card mt-5">
+				<div class="card-header text-center">
+					<h4>Chọn MFA Method</h4>
+				</div>
+				<div class="card-body">
+					<div>
+						<button
+							class="btn btn-primary"
+							ng-if="availableMfaMethods.indexOf('sms') !== -1"
+							ng-click="selectMfaMethod('sms')"
+						>
+							Verify via SMS
+						</button>
+						<button
+							class="btn btn-primary"
+							ng-if="availableMfaMethods.indexOf('email') !== -1"
+							ng-click="selectMfaMethod('email')"
+						>
+							Verify via Email
+						</button>
+						<button
+							class="btn btn-primary"
+							ng-if="availableMfaMethods.indexOf('authenticator') !== -1"
+							ng-click="selectMfaMethod('authenticator')"
+						>
+							Verify via Authenticator
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

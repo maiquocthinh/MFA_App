@@ -1,0 +1,25 @@
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-md-6">
+			<div class="card mt-5">
+				<div class="card-header text-center">
+					<h4>Verify SMS</h4>
+				</div>
+				<div class="card-body">
+					<div>
+						<div class="mt-3" ng-if="errorMessage">
+							<div class="alert alert-danger" role="alert">{{ errorMessage }}</div>
+						</div>
+						<form ng-submit="mfaVerify()">
+							<div class="form-group">
+								<label for="smsCode">SMS Code:</label>
+								<input type="text" id="smsCode" ng-model="smsCode" class="form-control" />
+							</div>
+							<button type="submit" class="btn btn-primary">Verify</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

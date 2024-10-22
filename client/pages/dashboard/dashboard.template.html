@@ -1,0 +1,151 @@
+<div class="container">
+	<style>
+		.form-check {
+			margin-bottom: 1.5rem; /* Add space between items */
+			font-size: 1.2rem; /* Increase font size */
+		}
+
+		.form-check-input {
+			width: 1.5rem; /* Increase checkbox size */
+			height: 1.5rem; /* Increase checkbox size */
+		}
+
+		.form-check-label {
+			margin-left: 0.5rem; /* Space between checkbox and label */
+		}
+	</style>
+
+	<h2>Dashboard</h2>
+	<ul class="nav nav-tabs" id="dashboardTabs">
+		<li class="nav-item" ng-class="{ active: activeTab === 'profile' }">
+			<a class="nav-link" href="#" ng-click="setActiveTab('profile')">Profile</a>
+		</li>
+		<li class="nav-item" ng-class="{ active: activeTab === 'sessions' }">
+			<a class="nav-link" href="#" ng-click="setActiveTab('sessions')">Login Sessions</a>
+		</li>
+		<li class="nav-item" ng-class="{ active: activeTab === 'mfaMethods' }">
+			<a class="nav-link" href="#" ng-click="setActiveTab('mfaMethods')">MFA Methods</a>
+		</li>
+	</ul>
+
+	<div class="tab-content">
+		<!-- Profile Tab -->
+		<div class="tab-pane container" ng-class="{ active: activeTab === 'profile' }">
+			<h3 class="mt-2">Profile Information</h3>
+			<div class="form-group">
+				<label for="email">Email:</label>
+				<input type="text" class="form-control" id="email" disabled ng-model="profileForm.email" />
+			</div>
+			<div class="form-group">
+				<label for="phoneNumber">Phone Number:</label>
+				<input type="text" class="form-control" id="phoneNumber" ng-model="profileForm.phoneNumber" />
+			</div>
+
+			<button class="btn btn-primary" ng-click="saveProfile()">Save Profile</button>
+
+			<h4 class="mt-2">Change Password</h4>
+			<div class="form-group">
+				<label for="newPassword">New Password:</label>
+				<input type="password" class="form-control" id="newPassword" ng-model="newPassword" />
+				<small class="text-danger" ng-if="errorMessages.newPassword">{{ errorMessages.newPassword }}</small>
+			</div>
+			<div class="form-group">
+				<label for="confirmPassword">Confirm Password:</label>
+				<input type="password" class="form-control" id="confirmPassword" ng-model="confirmPassword" />
+				<small class="text-danger" ng-if="errorMessages.confirmPassword">{{ errorMessages.confirmPassword }}</small>
+			</div>
+			<button class="btn btn-primary" ng-click="changePassword()">Change Password</button>
+			<div ng-if="errorMessage" class="alert alert-danger mt-2">{{ errorMessage }}</div>
+			<div ng-if="successMessage" class="alert alert-success mt-2">{{ successMessage }}</div>
+		</div>
+
+		<!-- Login Sessions Tab -->
+		<div class="tab-pane container" ng-class="{ active: activeTab === 'sessions' }">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Device</th>
+						<th>IP Address</th>
+						<th>Last Active</th>
+						<th>Login At</th>
+						<th>Expired At</th>
+						<th>Status</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="session in sessions">
+						<td>{{ session.device }}</td>
+						<td>{{ session.ipAddress }}</td>
+						<td>{{ session.lastActive | date: 'medium' }}</td>
+						<td>{{ session.createdAt | date: 'medium' }}</td>
+						<td>{{ session.expiredAt | date: 'medium' }}</td>
+						<td>
+							<span ng-if="session.isActive" class="text-success">Active</span>
+							<span ng-if="!session.isActive" class="text-danger">Inactive</span>
+						</td>
+						<td>
+							<span ng-if="session.isCurrentSession" class="text-muted">This session</span>
+							<button
+								ng-if="!session.isCurrentSession && session.isActive"
+								class="btn btn-danger"
+								ng-click="revokeSession(session.id)"
+							>
+								Revoke
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- MFA Methods Tab -->
+		<div class="tab-pane container" ng-class="{ active: activeTab === 'mfaMethods' }">
+			<div class="form-group" ng-repeat="method in mfaMethods">
+				<div class="form-check">
+					<input
+						type="checkbox"
+						class="form-check-input"
+						ng-model="method.enabled"
+						ng-change="updateMfaMethod(method)"
+						id="mfaMethod{{method.id}}"
+					/>
+					<label class="form-check-label" for="mfaMethod{{method.id}}">
+						<span class="font-weight-bold">{{ method.name }}</span>
+					</label>
+
+					<!-- QR Code Icon and Display -->
+					<div ng-if="method.id === 'authenticator' && method.enabled">
+						<span style="cursor: pointer; color: blue;" ng-click="getAuthenticatorQRCode()" data-toggle="modal" data-target="#qrCodeModal">
+							Click here to fetch QR Code
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- QR Code Modal -->
+			<div
+				class="modal fade"
+				id="qrCodeModal"
+				tabindex="-1"
+				role="dialog"
+				aria-labelledby="qrCodeModalLabel"
+				aria-hidden="true"
+			>
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="qrCodeModalLabel">Scan this QR Code</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<img ng-if="qrCodeUrl" ng-src="{{ qrCodeUrl }}" alt="QR Code" style="width: 100%; height: auto" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

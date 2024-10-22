@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Login Confirmation</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				background-color: #f4f4f4;
+				color: #333;
+			}
+			.container {
+				max-width: 600px;
+				margin: 0 auto;
+				background-color: #fff;
+				padding: 20px;
+				border-radius: 5px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			}
+			h1 {
+				color: #333;
+				font-size: 24px;
+				margin-bottom: 20px;
+			}
+			p {
+				font-size: 16px;
+				line-height: 1.5;
+			}
+			.button {
+				display: inline-block;
+				background-color: #28a745;
+				color: #fff;
+				padding: 10px 20px;
+				text-decoration: none;
+				border-radius: 5px;
+				font-size: 16px;
+			}
+			.button:hover {
+				background-color: #218838;
+			}
+			.text-link {
+				display: block;
+				margin-top: 10px;
+				font-size: 16px;
+				color: #007bff;
+				text-decoration: none;
+			}
+			.text-link:hover {
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Confirm Your Login</h1>
+			<p>Dear user <strong><%= email %></strong>,</p>
+			<p>We received a request to log in to your account from the following device:</p>
+			<p><strong>Device:</strong> <%= device %></p>
+			<p><strong>IP Address:</strong> <%= ipAddress %></p>
+			<p>If this was you, please click the link below to confirm your login:</p>
+			<p>
+				<a href="<%= loginLink %>" class="button">Confirm Login</a>
+				<br />
+				<span>If the button does not work, you can also click the link below:</span>
+				<br />
+				<a href="<%= loginLink %>" class="text-link"><%= loginLink %></a>
+			</p>
+			<p>Please note that this link will expire in <strong><%= expiryTime %></strong>.</p>
+			<p>If you did not make this request, please ignore this email.</p>
+			<br />
+			<p>Thank you,<br />The Team</p>
+		</div>
+	</body>
+</html>
